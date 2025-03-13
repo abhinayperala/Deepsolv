@@ -1,5 +1,5 @@
 # Deepsolv
-'''LinkedIn Company Scraper
+```LinkedIn Company Scraper
 
 This is a Flask-based web service that scrapes LinkedIn company details using Selenium and stores the extracted data in an SQLite database.
 
@@ -82,7 +82,7 @@ Response:
 Notes
 
 Ensure you have Chrome installed and the appropriate ChromeDriver version.
-
+```
 LinkedIn may block scraping, so use it responsibly and consider using proxies if necessary.
 
 License
