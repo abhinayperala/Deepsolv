@@ -6,11 +6,10 @@ import os
 
 app = Flask(__name__)
 
-# LinkedIn credentials from environment variables
-EMAIL = os.getenv("LINKEDIN_EMAIL")  # Set these in your system env
+EMAIL = os.getenv("LINKEDIN_EMAIL")  
 PASSWORD = os.getenv("LINKEDIN_PASSWORD")
 
-# Function to initialize SQLite DB
+
 def init_db():
     conn = sqlite3.connect("linkedin_data.db")
     cursor = conn.cursor()
@@ -32,19 +31,18 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Function to scrape company details
 def scrape_company_details(company_url):
-    # Setup Selenium WebDriver
+   
     driver = webdriver.Chrome()
 
-    # Log in to LinkedIn
+    
     actions.login(driver, EMAIL, PASSWORD)
 
-    # Scrape company details
+   
     company = Company(company_url, driver=driver)
-    driver.quit()  # Close browser after scraping
+    driver.quit()  
 
-    # Extract relevant data
+    
     return {
         "name": company.name,
         "url": company_url,
@@ -58,7 +56,7 @@ def scrape_company_details(company_url):
         "specialities": ", ".join(company.specialities) if company.specialities else None,
     }
 
-# Function to store data in SQLite
+
 def store_in_db(company_data):
     conn = sqlite3.connect("linkedin_data.db")
     cursor = conn.cursor()
@@ -76,17 +74,17 @@ def store_in_db(company_data):
 def scrape():
     data = request.get_json()
     
-    # Validate request data
+   
     if "url" not in data:
         return jsonify({"error": "Missing 'url' field in request"}), 400
 
     company_url = data["url"]
     
     try:
-        # Scrape company details
+    
         company_data = scrape_company_details(company_url)
 
-        # Store in SQLite
+       
         store_in_db(company_data)
 
         return jsonify({"message": "Data stored successfully", "company_data": company_data}), 200
@@ -95,5 +93,5 @@ def scrape():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    init_db()  # Initialize database
+    init_db() 
     app.run(debug=True)
